@@ -47,11 +47,12 @@ while (x < 21) {
 // -----------------------------------------------
 
 let listOfItems = ['html', 'css', 'javascript', 'mysql', 'mongodb', 'react', 'angular', 'node.js'];
+
+document.write(`<ul>`)
 for (let items of listOfItems) {
-    document.write(`<ul>
-        <li>${items}</li>
-    </ul>`);
+    document.write(`<li>${items}</li>`)
 }
+document.write(`</ul>`);
 
 
 // Використовуючи данні з масиву, за допомоги document.write та циклу побудувати структуру по шаблону
@@ -155,19 +156,19 @@ let users = [
 ];
 console.log('--------users with true status----------')
 for (const usertruestatus of users) {
-   if (usertruestatus.status){
-       console.log(usertruestatus)
-   }
+    if (usertruestatus.status) {
+        console.log(usertruestatus)
+    }
 }
 console.log('--------users with false status----------')
 for (const userfalsestatus of users) {
-    if (!userfalsestatus.status){
+    if (!userfalsestatus.status) {
         console.log(userfalsestatus)
     }
 }
 console.log('--------very old users----------')
 for (const olduser of users) {
-    if (olduser.age>30){
+    if (olduser.age > 30) {
         console.log(olduser)
     }
 }
