@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Info about user</title>
+</head>
+<style>
+    .divallstyle{
+        border: 2px solid black;
+    }
+    .divendstyle{
+        display: flex;
+        flex-wrap: wrap;
+        padding: 15px;
+        margin-left: 10px;
+    }
+    .divtitlestyle{
+        width: 17%;
+        text-align: center;
+    }
+
+</style>
+<body>
+<script>
+    let url = new URL(location.href);
+    let id = url.searchParams.get('id');
+    let h1 = document.createElement('h1');
+    let divall=document.createElement('div');
+    divall.classList.add('divallstyle');
+    h1.innerText = `Info about user ${id}:`
+    document.body.appendChild(h1);
+    fetch(`http://jsonplaceholder.typicode.com/users/${id}`)
+        .then(response => response.json())
+        .then(userInfo => {
+            let ul1 = document.createElement('ul');
+            for (const info in userInfo) {
+                //userInfo={id,name,username,email,address,phone,website,company}
+                //info=id,name,username,email,address,phone,website,company
+                if (typeof userInfo[info] !== "object") {
+                    //userInfo[info]=userInfo[id]='',userInfo[name]='',userInfo[username]='',email,phone,website
+                    let li1 = document.createElement('li');
+                    li1.innerText = info + ': ' + userInfo[info];
+                    ul1.appendChild(li1);
+                    //add in ul1 <--li1:
+                    // id:'',name:'',username:'',email:'',phone:'',website:''
+                }
+                if (typeof userInfo[info] == "object") {
+                    //userInfo[address]={'street','suite','city','zipcode',{geo}}
+                    //userInfo[company]={'name','catchPhrase','bs'}
+                    let li1 = document.createElement('li');
+                    li1.innerText = info + ':';
+                    ul1.appendChild(li1);
+                    //add in ul1 <--li1:
+                    // address:, company:
+                    let ul2 = document.createElement('ul');
+                    li1.appendChild(ul2);
+                    for (const item in userInfo[info]) {
+                        //userInfo[info]={address,company}
+                        //item='street','suite','city','zipcode',{geo},'name','catchPhrase','bs'
+                        if (typeof userInfo[info][item] !== 'object') {
+                            // let li3 = document.createElement('li');
+                            // li3.innerText = item + ':' + userInfo[info][item];
+                            // ul2.appendChild(li3);
+
+                            let li2 = document.createElement('li');
+                            li2.innerText = item + ': ' + userInfo[info][item];
+                            ul2.appendChild(li2);
+                        }
+                        if (typeof userInfo[info][item] == 'object') {
+                            //geo
+                            let li2 = document.createElement('li');
+                            li2.innerText = item + ':';
+                            ul2.appendChild(li2);
+                            //add geo in ul2
+                            let ul3 = document.createElement('ul');
+                            li2.appendChild(ul3);
+                            for (const itemKey in userInfo[info][item]) {
+                                let li3 = document.createElement('li');
+                                li3.innerText = itemKey + ': ' + userInfo[info][item][itemKey];
+                                ul3.appendChild(li3);
+                            }
+                        }
+                    }
+                }
+            } //end of 1st for..in
+            divall.appendChild(ul1);
+            document.body.append(divall);
+            let butt = document.createElement('button');
+            butt.innerText = 'posts of user';
+            butt.style.width = '50%';
+            butt.style.margin = '5px';
+            let ahr = document.createElement('a');
+            divall.append(butt);
+            butt.onclick = function () {
+                fetch(`https://jsonplaceholder.typicode.com/users/${id}/posts`)
+                    .then(response => response.json())
+                    .then(posts => {
+                        let divend=document.createElement('div');
+                        for (const post in posts) {
+                            let divtitle = document.createElement('div');
+                            divtitle.innerText = `title ${posts[post].id}: "${posts[post].title}"`;
+                            divtitle.style.border = '2px solid black';
+                            divtitle.style.margin = '5px';
+                            divtitle.classList.add('divtitlestyle');
+                            let atitle = document.createElement('a');
+                            atitle.innerText = 'info about post';
+                            atitle.href =
+                                `post-details.html?id=${id}&idpost=${posts[post].id}&title=${posts[post].title}&body=${posts[post].body}`;
+                            let p = document.createElement('p');
+                            p.appendChild(atitle);
+                            divtitle.appendChild(p);
+                            divend.appendChild(divtitle);
+                            divend.classList.add('divendstyle');
+
+                        }
+                        document.body.appendChild(divend);
+                    })
+            };
+
+
+            //перевірити як вивести назви постів знізу під кнопкою
+
+
+            //
+
+        })  //end of .then{}
+</script>
+</body>
+</html>
